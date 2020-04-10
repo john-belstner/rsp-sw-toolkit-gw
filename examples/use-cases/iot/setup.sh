@@ -1,4 +1,4 @@
- #!/usr/bin/env bash
+#!/bin/bash
 
 # Apache v2 license
 # Copyright (C) <2019> Intel Corporation
@@ -18,7 +18,7 @@ fi
 cd $GSG_DIR
 
 # Customizable options
-PARALLEL_BUILD=${PARALLEL_BUILD:-1}
+PARALLEL_BUILD=${PARALLEL_BUILD:-0}
 SKIP_GIT_UPDATES=${SKIP_GIT_UPDATES:-0}
 GITHUB_URL=${GITHUB_URL:-https://github.com}
 GITHUB_ORG=${GITHUB_ORG:-intel}
@@ -37,17 +37,17 @@ PARAMS=()
 
 printHelp() {
   printf "\
-Usage: $0 [options...]
+Usage: %s [options...]
 
   --usb   --usb-camera    run loss-prevention service using usb camera instead of IP Camera
-  -s      --sequential    run everything sequentially (no parallel builds)
+  -p      --parallel      run build and deploy in parallel
   -su     --skip-update   skip checking updates for this script
 
   --url     --github-url  <url>     set the base url to clone from github, including git:// or https://
   --org     --github-org  <org>     set the github organization name (first path after base-url)
   --prefix  --repo-prefix <prefix>  set the prefix to append to each repo-name (default is no prefix)
 
-"
+" "$0"
 }
 
 printAdditionalHelp() {
@@ -69,7 +69,7 @@ parseArguments() {
       -nc|--no-color) COLOR=0; shift ;;
       -ns|--no-stlye) STYLE=0; shift ;;
       -na|--no-ansi) STYLE=0; COLOR=0; shift ;;
-      -s|--seq|--sequential) PARALLEL_BUILD=0; shift ;;
+      -p|--parallel) PARALLEL_BUILD=1; shift ;;
       -su|--skip-update) SKIP_UPDATE=1; shift ;;
       -sx|--set-x) SET_X=1; shift ;;
       -d|--debug) DEBUG=1; shift ;;
