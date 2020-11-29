@@ -1,5 +1,5 @@
 {
-  "id": "ClusterAllMotion_PORTS_1",
+  "id": "ClusterMotionTriggered_PORTS_1",
   "operation_mode": "NonContinuous",
   "link_profile": 1,
   "power_level": 28.5,
@@ -13,7 +13,7 @@
   "max_q_value": 15,
   "retry_count": 0,
   "threshold_multiplier": 2,
-  "dwell_time": 4000,
+  "dwell_time": 3500,
   "inv_cycles": 0,
   "toggle_target_flag": true,
   "repeat_until_no_tags": false,
