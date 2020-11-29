@@ -4,4 +4,4 @@
  */
 package com.intel.rfid.api.data;
 
-public enum ScheduleRunState {INACTIVE, ALL_ON, ALL_SEQUENCED, FROM_CONFIG}
+public enum ScheduleRunState {INACTIVE, ALL_ON, ALL_SEQUENCED, MOTION_TRIGGERED, FROM_CONFIG}

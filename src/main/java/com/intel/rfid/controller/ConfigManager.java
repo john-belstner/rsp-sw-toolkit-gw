@@ -376,4 +376,8 @@ public class ConfigManager {
         return getOptBool("provision.sensor.token.required", false);
     }
 
+    public long getMotionTriggerHoldoffMillis() {
+        return getOptLong("inventory.motion.trigger.holdoff.millis", 7000);
+    }
+
 }

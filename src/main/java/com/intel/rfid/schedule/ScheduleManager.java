@@ -55,11 +55,13 @@ public class ScheduleManager
 
     public static final String BEHAVIOR_ID_ALL_ON = "ClusterAllOn_PORTS_1";
     public static final String BEHAVIOR_ID_ALL_SEQ = "ClusterAllSeq_PORTS_1";
+    public static final String BEHAVIOR_ID_MOTION_TRIGGERED = "ClusterMotionTriggered_PORTS_1";
 
     protected final ExecutorService clusterExec = Executors.newCachedThreadPool();
     protected final List<ClusterRunner> clusterRunners = new ArrayList<>();
     protected final Collection<Future<?>> clusterFutures = new ArrayList<>();
     protected final ClusterManager clusterMgr;
+    protected final SensorManager sensorMgr;
 
     public static class CacheState {
         public ScheduleRunState runState;
@@ -77,8 +79,9 @@ public class ScheduleManager
         runStatePublisher.unsubscribe(_l);
     }
 
-    public ScheduleManager(ClusterManager _clusterMgr) {
+    public ScheduleManager(ClusterManager _clusterMgr, SensorManager _sensorMgr) {
         clusterMgr = _clusterMgr;
+        sensorMgr = _sensorMgr;
     }
 
     public synchronized boolean start() {
@@ -227,6 +230,15 @@ public class ScheduleManager
             case FROM_CONFIG:
                 stopClusters();
                 break;
+            case MOTION_TRIGGERED:
+                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_MOTION_TRIGGERED);
+                behavior.use_motion = false;
+                List<SensorPlatform> sensors = new ArrayList<>();
+                sensorMgr.getSensors(sensors);
+                for (SensorPlatform sensor : sensors) {
+                    sensor.setBehavior(behavior);
+                }
+                break;
             default:
         }
 
@@ -256,6 +268,14 @@ public class ScheduleManager
             case ALL_SEQUENCED:
             case FROM_CONFIG:
                 startClusters();
+                break;
+            case MOTION_TRIGGERED:
+                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_MOTION_TRIGGERED);
+                List<SensorPlatform> sensors = new ArrayList<>();
+                sensorMgr.getSensors(sensors);
+                for (SensorPlatform sensor : sensors) {
+                    sensor.setBehavior(behavior);
+                }
                 break;
         }
 

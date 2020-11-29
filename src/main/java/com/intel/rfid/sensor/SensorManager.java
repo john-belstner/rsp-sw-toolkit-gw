@@ -217,6 +217,7 @@ public class SensorManager {
 
         SensorPlatform sensor = establish(_deviceId);
         sensor.setProvisionToken(_provisioningToken);
+        sensor.setMotionTriggerHoldoffMillis(ConfigManager.instance.getMotionTriggerHoldoffMillis());
         clusterMgr.alignSensor(sensor);
     }
 
@@ -291,7 +292,7 @@ public class SensorManager {
         SensorPlatform sensor;
         synchronized (deviceIdToRSP) {
             sensor = deviceIdToRSP.get(_deviceId);
-            if(sensor == null) {
+            if (sensor == null) {
                 String convertedId = StringHelper.convertCaseRSPId(_deviceId);
                 sensor = new SensorPlatform(convertedId, this);
                 deviceIdToRSP.put(convertedId, sensor);

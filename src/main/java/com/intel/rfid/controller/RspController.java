@@ -68,7 +68,7 @@ public class RspController implements CLICommandBuilder {
             downstreamMgr = new DownstreamManager(sensorMgr, gpioMgr);
         }
         if (scheduleMgr == null) {
-            scheduleMgr = new ScheduleManager(clusterMgr);
+            scheduleMgr = new ScheduleManager(clusterMgr, sensorMgr);
         }
         if (upstreamMgr == null) {
             upstreamMgr = new UpstreamManager(clusterMgr,

@@ -179,6 +179,7 @@ public class Behavior {
     public boolean perform_select = false;
     public boolean perform_post_match = false;
     public boolean filter_duplicates = false;
+    public boolean use_motion = false;
     public boolean auto_repeat = true;
 
     private int delay_time = 0;

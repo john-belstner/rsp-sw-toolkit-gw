@@ -110,9 +110,11 @@ public class SensorPlatform
     protected ReadState readState = ReadState.STOPPED;
     protected final AtomicTimeMillis lastCommsMillis = new AtomicTimeMillis();
     private final AtomicTimeMillis lastStartFailure = new AtomicTimeMillis();
+    private final AtomicTimeMillis lastInventoryComplete = new AtomicTimeMillis();
     protected boolean inDeepScan = false;
     protected String provisionToken;
     protected RspInfo rspInfo;
+    protected long motionTriggerHoldoffMillis = 7000;
 
     public SensorPlatform(String _deviceId,
                           SensorManager _sensorMgr) {
@@ -211,6 +213,10 @@ public class SensorPlatform
     private void changeFacilityId(String _id) {
         facilityId = _id;
         sensorMgr.notifyConfigUpdate(this);
+    }
+
+    public void setMotionTriggerHoldoffMillis(long _motionTriggerHoldoffMillis) {
+        motionTriggerHoldoffMillis = _motionTriggerHoldoffMillis;
     }
 
     public void clearPersonality() {
@@ -488,6 +494,8 @@ public class SensorPlatform
             setReadState(ReadState.STOPPED);
         }
 
+        lastInventoryComplete.set(_msg.params.sent_on);
+
         synchronized (latchLock) {
             if (inventoryLatch != null) {
                 inventoryLatch.countDown();
@@ -501,6 +509,11 @@ public class SensorPlatform
 
     private void onMotionEvent(MotionEventNotification _msg) {
         logInboundJson(logMotion, _msg.getMethod(), _msg.params);
+        long timeSinceLastInventoryComplete = _msg.params.sent_on - lastInventoryComplete.get();
+        if (currentBehavior.use_motion && (timeSinceLastInventoryComplete > motionTriggerHoldoffMillis)) {
+            setReadState(ReadState.STARTED);
+            execute(new ApplyBehaviorRequest(ApplyBehaviorRequest.Action.START, currentBehavior));
+        }
     }
 
     private void onStatusUpdate(StatusUpdateNotification _msg) {
@@ -531,6 +544,7 @@ public class SensorPlatform
                 // to confirm the connection request and response
                 if (connectionState == Connection.State.CONNECTING) {
                     changeConnectionState(Connection.State.CONNECTED, Connection.Cause.READY);
+                    setMotion(true, false);
                 }
                 break;
             case in_reset:

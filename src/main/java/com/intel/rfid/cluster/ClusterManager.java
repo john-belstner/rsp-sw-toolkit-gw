@@ -314,7 +314,7 @@ public class ClusterManager {
         }
     }
 
-    private Behavior getBehavior(String _id) {
+    public Behavior getBehavior(String _id) {
         try {
             return BehaviorConfig.getBehavior(_id);
         } catch (IOException _e) {
