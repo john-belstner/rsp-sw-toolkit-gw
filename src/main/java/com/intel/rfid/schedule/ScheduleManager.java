@@ -55,7 +55,7 @@ public class ScheduleManager
 
     public static final String BEHAVIOR_ID_ALL_ON = "ClusterAllOn_PORTS_1";
     public static final String BEHAVIOR_ID_ALL_SEQ = "ClusterAllSeq_PORTS_1";
-    public static final String BEHAVIOR_ID_MOTION_TRIGGERED = "ClusterMotionTriggered_PORTS_1";
+    public static final String BEHAVIOR_ID_ALL_MOTION_TRIGGERED = "ClusterMotionTriggered_PORTS_1";
 
     protected final ExecutorService clusterExec = Executors.newCachedThreadPool();
     protected final List<ClusterRunner> clusterRunners = new ArrayList<>();
@@ -230,8 +230,8 @@ public class ScheduleManager
             case FROM_CONFIG:
                 stopClusters();
                 break;
-            case MOTION_TRIGGERED:
-                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_MOTION_TRIGGERED);
+            case ALL_MOTION_TRIGGERED:
+                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_ALL_MOTION_TRIGGERED);
                 behavior.use_motion = false;
                 List<SensorPlatform> sensors = new ArrayList<>();
                 sensorMgr.getSensors(sensors);
@@ -269,8 +269,8 @@ public class ScheduleManager
             case FROM_CONFIG:
                 startClusters();
                 break;
-            case MOTION_TRIGGERED:
-                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_MOTION_TRIGGERED);
+            case ALL_MOTION_TRIGGERED:
+                Behavior behavior = clusterMgr.getBehavior(BEHAVIOR_ID_ALL_MOTION_TRIGGERED);
                 List<SensorPlatform> sensors = new ArrayList<>();
                 sensorMgr.getSensors(sensors);
                 for (SensorPlatform sensor : sensors) {

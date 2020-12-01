@@ -115,7 +115,7 @@ public class ClusterRunner implements Runnable {
 
     public void awaitFinish() {
         try {
-            completedLatch.await();
+            completedLatch.await(10, TimeUnit.SECONDS);
         } catch (InterruptedException _e) {
             log.debug("Cluster[{}]: interrupted while awaitFinish", clusterId);
             Thread.currentThread().interrupt();

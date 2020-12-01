@@ -656,6 +656,12 @@ public class SensorPlatform
     private final AtomicBoolean scanCompletedSuccessfully = new AtomicBoolean(false);
 
     public CompletableFuture<Boolean> startScanAsync(final Behavior _behavior) {
+
+        if (_behavior.use_motion) {
+            setBehavior(_behavior);
+            return null;
+        }
+
         CountDownLatch latch = new CountDownLatch(1);
         synchronized (latchLock) {
             inventoryLatch = latch;
