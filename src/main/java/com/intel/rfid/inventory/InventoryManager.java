@@ -155,6 +155,7 @@ public class InventoryManager
     // this executor could probably be single threaded...or perhaps an executor per datastore?
     private static final int SCHED_THREAD_POOL_SIZE = 3;
     protected ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(SCHED_THREAD_POOL_SIZE);
+    protected int globalMinRssiDbm10X = Integer.MIN_VALUE;
 
     public boolean start() {
         if (scheduler.isShutdown()) {
@@ -166,6 +167,7 @@ public class InventoryManager
         scheduleReadRateStatsTask();
         schedulePersistence();
         log.info(getClass().getSimpleName() + " started");
+        globalMinRssiDbm10X = getGlobalMinimumRssiDbm10x();
         return true;
     }
 
@@ -251,7 +253,7 @@ public class InventoryManager
                                    SensorPlatform _rsp,
                                    TagRead _tagRead) {
 
-        if (_tagRead.rssi < _rsp.getMinRssiDbm10X()) {
+        if (_tagRead.rssi < _rsp.getMinRssiDbm10X() || _tagRead.rssi < globalMinRssiDbm10X) {
             return;
         }
         String epc = _tagRead.epc;
@@ -555,6 +557,10 @@ public class InventoryManager
     protected long getPOSReturnThreshold() {
         return ConfigManager.instance.getOptLong("inventory.POS.return.threshold.millis",
                                                  TimeUnit.DAYS.toMillis(1));
+    }
+
+    public int getGlobalMinimumRssiDbm10x() {
+        return ConfigManager.instance.getOptInt("inventory.global.minimum.rssi.dbm10x", Integer.MIN_VALUE);
     }
 
     public static final Path CACHE_PATH = Env.resolveCache("current_inventory.json");
