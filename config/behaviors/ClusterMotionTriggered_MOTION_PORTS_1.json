@@ -1,5 +1,5 @@
 {
-  "id": "ClusterMotionTriggered_PORTS_1",
+  "id": "ClusterMotionTriggered_MOTION_PORTS_1",
   "operation_mode": "NonContinuous",
   "link_profile": 1,
   "power_level": 28.5,
@@ -21,6 +21,5 @@
   "perform_post_match": false,
   "filter_duplicates": false,
   "toggle_mode": "OnInvCycle",
-  "use_motion": true,
   "auto_repeat": false
 }

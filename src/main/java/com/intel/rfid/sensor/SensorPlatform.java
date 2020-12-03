@@ -510,7 +510,7 @@ public class SensorPlatform
     private void onMotionEvent(MotionEventNotification _msg) {
         logInboundJson(logMotion, _msg.getMethod(), _msg.params);
         long timeSinceLastInventoryComplete = _msg.params.sent_on - lastInventoryComplete.get();
-        if (currentBehavior.use_motion && (timeSinceLastInventoryComplete > motionTriggerHoldoffMillis)) {
+        if (currentBehavior.id.contains("MOTION_") && (timeSinceLastInventoryComplete > motionTriggerHoldoffMillis)) {
             setReadState(ReadState.STARTED);
             execute(new ApplyBehaviorRequest(ApplyBehaviorRequest.Action.START, currentBehavior));
         }
@@ -657,7 +657,7 @@ public class SensorPlatform
 
     public CompletableFuture<Boolean> startScanAsync(final Behavior _behavior) {
 
-        if (_behavior.use_motion) {
+        if (_behavior.id.contains("MOTION_")) {
             setBehavior(_behavior);
             return null;
         }
