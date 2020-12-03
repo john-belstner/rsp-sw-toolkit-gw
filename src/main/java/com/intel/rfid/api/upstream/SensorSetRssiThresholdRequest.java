@@ -8,7 +8,7 @@ import com.intel.rfid.api.JsonRequest;
 
 public class SensorSetRssiThresholdRequest extends JsonRequest {
 
-    public static final String METHOD_NAME = "sensor_set_min_rssi";
+    public static final String METHOD_NAME = "sensor_set_rssi_threshold";
 
     public class Params {
         public String device_id;

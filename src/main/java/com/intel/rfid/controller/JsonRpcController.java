@@ -654,9 +654,10 @@ public class JsonRpcController
                 break;
             }
             case SensorSetRssiThresholdRequest.METHOD_NAME: {
-                int threshold = _rootNode.get("params").get("threshold").asInt();
+                int threshold = _rootNode.get("params").get("rssi_threshold").asInt();
+                log.info("Set RSSI Threshold to {} for device id: {}", threshold, deviceId);
                 sensor.setMinRssiDbm10X(threshold);
-                sendOK(_reqId, true);
+                sendOK(_reqId, "OK");
                 break;
             }
         }
